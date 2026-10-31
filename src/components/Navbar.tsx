@@ -33,37 +33,55 @@ interface NavbarProps {
 
 export default function Navbar({ user, onLogout }: NavbarProps) {
   return (
-    <nav className="w-full bg-emerald-950/40 backdrop-blur-md border-b border-emerald-500/30 px-6 py-4 flex justify-between items-center relative z-50">
+    <nav className="w-full bg-emerald-950/40 backdrop-blur-md border-b border-emerald-500/30 px-6 py-4 grid grid-cols-3 items-center relative z-50">
       
-      
-      <Link href="/" className="flex items-center gap-3 group">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 shadow-lg group-hover:scale-105 transition-transform">
-          <Image
-            src="/logo.jpg"
-            alt="EverNear Logo"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-        <span className="text-2xl font-black tracking-wider text-white">
-          EVER<span className="text-amber-300">NEAR</span>
-        </span>
-      </Link>
+      {/* 1. App Logo & Name (Left Column) */}
+      <div className="flex items-center justify-start">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 shadow-lg group-hover:scale-105 transition-transform">
+            <Image
+              src="/logo.jpg"
+              alt="EverNear Logo"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          <span className="text-2xl font-black tracking-wider text-white">
+            EVER<span className="text-amber-300">NEAR</span>
+          </span>
+        </Link>
+      </div>
 
-      {/* Navigation Items & Auth */}
-      <div className="flex items-center gap-6">
-        
+      {/* 2. Navigation Links (Middle Column - Centered) */}
+      <div className="flex items-center justify-center gap-8">
         <Link
-          href="/events"
-          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider mr-2"
+          href="/"
+          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
         >
-          Upcoming Events
+          Home
         </Link>
 
+        <Link
+          href="/schedules"
+          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
+        >
+          Schedules
+        </Link>
+
+        <Link
+          href="/about"
+          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
+        >
+          About
+        </Link>
+      </div>
+
+      {/* 3. Auth Buttons / User Profile (Right Column) */}
+      <div className="flex items-center justify-end gap-3">
         {!user ? (
-    
-          <div className="flex items-center gap-3">
+          /* Logged Out State */
+          <>
             <Link
               href="/login"
               className={buttonVariants({
@@ -79,12 +97,12 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               href="/register"
               className={buttonVariants({
                 className:
-                  "bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold border border-amber-300/40 shadow-lg hover:shadow-emerald-500/20 text-xs uppercase tracking-wider",
+                  "bg-emerald-600 hover:bg-emerald-500 text-amber-400 font-bold border border-amber-300/40 shadow-lg hover:shadow-emerald-500/20 text-xs uppercase tracking-wider",
               })}
             >
               Sign Up
             </Link>
-          </div>
+          </>
         ) : (
           /* Logged In State */
           <TooltipProvider>
@@ -145,6 +163,7 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
           </TooltipProvider>
         )}
       </div>
+
     </nav>
   );
 }

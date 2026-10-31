@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer"
 // Import your auth client (e.g., Firebase auth, NextAuth useSession, etc.)
 
 export default function Home() {
@@ -62,6 +63,8 @@ export default function Home() {
         </main>
 
       </div>
+      <Footer />
     </div>
+    
   );
 }
