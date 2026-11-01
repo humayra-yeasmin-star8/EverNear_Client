@@ -1,4 +1,5 @@
 "use client";
+
 import { authClient } from "@/lib/auth-client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -7,13 +8,21 @@ import HeroEventBar from "@/components/HeroEventBar";
 import Footer from "@/components/Footer";
 import UpcomingEventCard from "@/components/UpcomingEventCard";
 import PreviousEventCard from "@/components/PreviousEventCard";
-import { EventItem, User } from "@/types/event";
+import { EventItem } from "@/types/event";
 import { fetchEvents } from "@/lib/api";
-import { Sparkles, Calendar, Heart, ShieldAlert } from "lucide-react";
-import {signUp} from "@/lib/auth-client"; 
+import { Sparkles, ShieldAlert } from "lucide-react";
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
+  const { data: session } = authClient.useSession();
+
+  // Dynamically map session user to navbar format
+  const user = session?.user
+    ? {
+        id: session.user.id,
+        displayName: session.user.name || "User",
+        email: session.user.email,
+      }
+    : null;
 
   const [upcomingEvents, setUpcomingEvents] = useState<EventItem[]>([]);
   const [completedEvents, setCompletedEvents] = useState<EventItem[]>([]);
@@ -31,7 +40,7 @@ export default function Home() {
         setCompletedEvents(completedData);
       } catch (err) {
         console.error("Failed to load events from backend", err);
-      } finally{
+      } finally {
         setLoading(false);
       }
     }
@@ -42,27 +51,18 @@ export default function Home() {
     <div className="min-h-screen bg-amber-200 text-slate-900 flex flex-col justify-between">
       {/* --- HERO SECTION CONTAINER --- */}
       <section className="relative w-full h-[85vh] min-h-[600px] overflow-hidden shadow-2xl">
-        {/* Artwork Image constrained to Hero Section only */}
+        {/* Hero Cover Image using object-cover to prevent stretching */}
         <Image
           src="/download.jpg"
           alt="EverNear Hero Cover"
           fill
           priority
           sizes="100vw"
-          className="object-center object-fill z-0 px-5 py-5"
+          className="object-cover object-center z-0"
         />
 
-      {/* Floating Transparent Navbar */}
-<Navbar 
-  user={user} 
-  onLogin={() => setUser({ id: "user_101", displayName: "Sarah Jenkins", email: "sarah@example.com" })}
-  onLogout={() => setUser(null)} 
-/>
-
-{/* SECTION 2: Upcoming Events with ID for smooth scrolling */}
-<section id="events-section" className="space-y-8 scroll-mt-24">
-  {/* ... upcoming events grid ... */}
-</section>
+        {/* Floating Transparent Navbar */}
+        <Navbar user={user} />
 
         {/* Hero Content Overlay */}
         <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 text-center pb-24">
@@ -88,7 +88,7 @@ export default function Home() {
       {/* --- MAIN CONTENT AREA --- */}
       <main className="max-w-7xl mx-auto px-4 py-16 space-y-20 w-full">
         {/* SECTION 2: Upcoming Events */}
-        <section className="space-y-8">
+        <section id="events-section" className="space-y-8 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-900 text-amber-200 text-xs font-semibold shadow">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -98,7 +98,7 @@ export default function Home() {
               Upcoming Community Events
             </h2>
             <p className="text-sm text-slate-700">
-              Explore 10 realistic community initiatives coming up in Dhaka. Click to join or save a reminder.
+              Explore realistic community initiatives coming up in Dhaka. Click to join or save a reminder.
             </p>
           </div>
 
@@ -111,7 +111,9 @@ export default function Home() {
           ) : upcomingEvents.length === 0 ? (
             <div className="text-center py-12 bg-amber-100/60 rounded-2xl border border-amber-300 p-6">
               <p className="text-sm font-semibold text-slate-800">No upcoming events found.</p>
-              <p className="text-xs text-slate-600 mt-1">Make sure your Express server is running on http://localhost:8000 and seed data is populated.</p>
+              <p className="text-xs text-slate-600 mt-1">
+                Make sure your backend server is running and seed data is populated.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,19 +170,12 @@ export default function Home() {
               Please sign in or log into your account before registering your interest or saving reminders.
             </p>
             <div className="pt-2 space-y-2">
-              <button
-                onClick={() => {
-                  setUser({
-                    id: "user_101",
-                    displayName: "Sarah Jenkins",
-                    email: "sarah@example.com",
-                  });
-                  setAuthModalOpen(false);
-                }}
-                className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow"
+              <a
+                href="/signin"
+                className="block w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow"
               >
-                Sign In as Guest Demo
-              </button>
+                Go to Sign In
+              </a>
               <button
                 onClick={() => setAuthModalOpen(false)}
                 className="w-full py-2 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-100"
@@ -192,7 +187,7 @@ export default function Home() {
         </div>
       )}
 
-  
+     
     </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import { authClient } from "@/lib/auth-client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,16 +29,18 @@ export default function EventDetailsPage() {
   const [event, setEvent] = useState<EventItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>({
-    id: "user_101",
-    displayName: "Sarah Jenkins",
-    email: "sarah@example.com",
-  });
+  const { data: session } = authClient.useSession();
+  const user = session?.user
+    ? {
+        id: session.user.id,
+        displayName: session.user.name || "User",
+        email: session.user.email,
+      }
+    : null;
 
   const [joined, setJoined] = useState(false);
   const [reminded, setReminded] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-
   useEffect(() => {
     async function loadEvent() {
       try {
