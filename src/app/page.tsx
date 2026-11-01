@@ -10,6 +10,7 @@ import PreviousEventCard from "@/components/PreviousEventCard";
 import { EventItem, User } from "@/types/event";
 import { fetchEvents } from "@/lib/api";
 import { Sparkles, Calendar, Heart, ShieldAlert } from "lucide-react";
+import {signUp} from "@/lib/auth-client"; 
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -190,7 +191,7 @@ export default function Home() {
         </div>
       )}
 
-      <Footer />
+  
     </div>
   );
 }

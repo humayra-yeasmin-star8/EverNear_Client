@@ -19,11 +19,12 @@ export default function Footer() {
               EVERNEAR MARKET
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
-              <li><Link href="/terms" className="hover:text-amber-300 transition-colors">Terms of Service</Link></li>
+            
               <li><Link href="/guidelines" className="hover:text-amber-300 transition-colors">Event Guidelines</Link></li>
               <li><Link href="/api" className="hover:text-amber-300 transition-colors">Platform API</Link></li>
               <li><Link href="/organizers" className="hover:text-amber-300 transition-colors">Become an Organizer</Link></li>
-              <li><Link href="/privacy" className="hover:text-amber-300 transition-colors">Privacy Policy</Link></li>
+
+
             </ul>
           </div>
 

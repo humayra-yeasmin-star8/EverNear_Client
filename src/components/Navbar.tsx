@@ -98,7 +98,7 @@ export default function Navbar({
               </Button>
 
               <Link
-                href="/register"
+                href="/signUp"
                 className={buttonVariants({
                   size: "sm",
                  className:"border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-amber-600 text-xs font-bold"
