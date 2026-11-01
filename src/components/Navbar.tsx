@@ -33,9 +33,9 @@ interface NavbarProps {
 
 export default function Navbar({ user, onLogout }: NavbarProps) {
   return (
-    <nav className="w-full bg-emerald-950/40 backdrop-blur-md border-b border-emerald-500/30 px-6 py-4 grid grid-cols-3 items-center relative z-50">
+    <nav className="absolute top-0 left-0 right-0 w-full bg-transparent px-9 py-9 grid grid-cols-3 items-center z-50">
       
-      {/* 1. App Logo & Name (Left Column) */}
+      {/* 1. App Logo & Name (Left) */}
       <div className="flex items-center justify-start">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 shadow-lg group-hover:scale-105 transition-transform">
@@ -47,47 +47,46 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               priority
             />
           </div>
-          <span className="text-2xl font-black tracking-wider text-white">
+          <span className="text-2xl font-black tracking-wider text-white drop-shadow-md">
             EVER<span className="text-amber-300">NEAR</span>
           </span>
         </Link>
       </div>
 
-      {/* 2. Navigation Links (Middle Column - Centered) */}
+      {/* 2. Centered Navigation Links (Middle) */}
       <div className="flex items-center justify-center gap-8">
         <Link
           href="/"
-          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
+          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           Home
         </Link>
 
         <Link
           href="/schedules"
-          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
+          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           Schedules
         </Link>
 
         <Link
           href="/about"
-          className="text-white hover:text-amber-300 font-medium transition-colors text-sm uppercase tracking-wider"
+          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           About
         </Link>
       </div>
 
-      {/* 3. Auth Buttons / User Profile (Right Column) */}
+      {/* 3. Auth Buttons / Profile (Right) */}
       <div className="flex items-center justify-end gap-3">
         {!user ? (
-          /* Logged Out State */
           <>
             <Link
               href="/login"
               className={buttonVariants({
                 variant: "outline",
                 className:
-                  "border-emerald-500/60 bg-slate-900/60 text-white hover:bg-emerald-800/40 hover:text-amber-300 text-xs uppercase tracking-wider font-semibold",
+                  "border-amber-300/60 bg-black/30 text-white hover:bg-emerald-800/50 hover:text-amber-300 text-xs uppercase tracking-wider font-semibold backdrop-blur-sm",
               })}
             >
               Sign In
@@ -97,14 +96,13 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               href="/register"
               className={buttonVariants({
                 className:
-                  "bg-emerald-600 hover:bg-emerald-500 text-amber-400 font-bold border border-amber-300/40 shadow-lg hover:shadow-emerald-500/20 text-xs uppercase tracking-wider",
+                  "bg-emerald-500 hover:bg-emerald-400 text-[#FACC15] drop-shadow-[0_0_10px_rgba(250,204,21,0.8)] font-bold border border-amber-300/40 shadow-lg text-xs uppercase tracking-wider",
               })}
             >
               Sign Up
             </Link>
           </>
         ) : (
-          /* Logged In State */
           <TooltipProvider>
             <DropdownMenu>
               <Tooltip>
@@ -133,19 +131,19 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
                 <DropdownMenuSeparator className="bg-emerald-800/40" />
                 
                 <DropdownMenuItem className="p-0">
-                  <Link href="/create-event" className="w-full px-2 py-1.5 cursor-pointer hover:text-amber-300">
+                  <Link href="/create-event" className="w-full px-3 py-2 cursor-pointer hover:text-amber-300">
                     ➕ Create Event
                   </Link>
                 </DropdownMenuItem>
                 
                 <DropdownMenuItem className="p-0">
-                  <Link href="/manage-events" className="w-full px-2 py-1.5 cursor-pointer hover:text-amber-300">
+                  <Link href="/manage-events" className="w-full px-3 py-2 cursor-pointer hover:text-amber-300">
                     ⚙️ Manage Events
                   </Link>
                 </DropdownMenuItem>
                 
                 <DropdownMenuItem className="p-0">
-                  <Link href="/joined-events" className="w-full px-2 py-1.5 cursor-pointer hover:text-amber-300">
+                  <Link href="/joined-events" className="w-full px-3 py-2 cursor-pointer hover:text-amber-300">
                     🤝 Joined Events
                   </Link>
                 </DropdownMenuItem>
@@ -154,7 +152,7 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
                 
                 <DropdownMenuItem
                   onClick={onLogout}
-                  className="cursor-pointer text-red-400 focus:bg-red-500/10 focus:text-red-300"
+                  className="cursor-pointer text-red-400 focus:bg-red-500/10 focus:text-red-300 px-3 py-2"
                 >
                   🚪 Logout
                 </DropdownMenuItem>
