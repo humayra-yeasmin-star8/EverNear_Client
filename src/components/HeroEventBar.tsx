@@ -17,8 +17,7 @@ export default function HeroEventBar({
   category = "Winter Cloth Drive",
 }: EventBarProps) {
   return (
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[90%] max-w-6xl bg-slate-950/85 border border-emerald-500/40 rounded-2xl backdrop-blur-md shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-emerald-500/20 text-white z-20 px-8 py-3">
-      
+    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl bg-slate-950/85 border border-emerald-500/40 rounded-2xl backdrop-blur-md shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-emerald-500/20 text-white z-20 px-8 py-3">
       {/* 1. DATE */}
       <div className="flex items-center gap-4 p-5">
         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-amber-300">
