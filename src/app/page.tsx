@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import HeroEventBar from "@/components/HeroEventBar";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [user, setUser] = useState<{
@@ -25,29 +27,35 @@ export default function Home() {
           priority
           className="object-center object-fill z-0 px-5 py-5"
         />
+       
 
         {/* Floating Transparent Navbar */}
         <Navbar user={user} onLogout={() => setUser(null)} />
 
         {/* Hero Content Overlay */}
-        <div className="relative z-10 w-full h-full flex items-center justify-center p-6">
-          <div className="text-center bg-slate-950/75 border border-emerald-500/40 p-8 rounded-2xl max-w-xl backdrop-blur-md shadow-2xl">
-            <h1 className="text-4xl font-extrabold text-amber-300 mb-3 tracking-tight">
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 text-center pb-24">
+          <div className="bg-slate-950/75 border border-emerald-500/40 p-8 rounded-2xl max-w-xl backdrop-blur-md shadow-2xl">
+            <h1 className="text-4xl font-extrabold text-amber-300 mb-3 tracking-tight drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]">
               EverNear Community Hub
             </h1>
-            <p className="text-slate-200 text-sm leading-relaxed">
-              Community-driven local social service events platform in Dhaka.
+            <p className="text-slate-200 text-sm leading-relaxed drop-shadow">
+              Community-driven local social service events platform in Dhaka. Join us to make a direct impact.
             </p>
           </div>
         </div>
 
+        {/* Floating Bottom Event Details Bar */}
+        <HeroEventBar 
+          date="NOV 15 - 17, 2026"
+          location="Gulshan Community Center, Dhaka"
+          joinedCount={142}
+          category="Winter Cloth Drive"
+        />
+
       </section>
 
-      {/* --- REST OF THE PAGE (WHITE / LIGHT CANVAS BELOW HERO) --- */}
-      <main className="max-w-7xl mx-auto px-6 py-16 w-full">
-        <h2 className="text-2xl font-bold text-slate-800 mb-4">Upcoming Social Drives</h2>
-        <p className="text-slate-600">Events grid content will be loaded here...</p>
-      </main>
+      <Footer/>
+
 
     </div>
   );

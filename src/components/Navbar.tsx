@@ -57,24 +57,31 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
       <div className="flex items-center justify-center gap-8">
         <Link
           href="/"
-          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
+          className="text-black hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           Home
+        </Link>
+          <Link
+          href="/all-events"
+          className=" text-black drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider"
+        >
+          ALL Events
         </Link>
 
         <Link
           href="/schedules"
-          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
+          className="text-black hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           Schedules
         </Link>
 
         <Link
           href="/about"
-          className="text-white hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
+          className="text-black hover:text-amber-300 font-semibold transition-colors text-sm uppercase tracking-wider drop-shadow-md"
         >
           About
         </Link>
+      
       </div>
 
       {/* 3. Auth Buttons / Profile (Right) */}
