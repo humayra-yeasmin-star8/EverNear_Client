@@ -30,7 +30,7 @@ export default function Navbar({
   onLogout,
 }: NavbarProps) {
   return (
-   <header className="absolute top-0 left-0 right-0 z-50 px-6 md:px-9 py-6 bg-transparent">
+    <header className="absolute top-0 left-0 right-0 z-50 px-6 md:px-9 py-6 bg-transparent">
 
       <div className="max-w-7xl mx-auto grid grid-cols-3 items-center">
 
@@ -38,12 +38,12 @@ export default function Navbar({
         <div className="flex items-center justify-start">
           <Link href="/" className="flex items-center gap-2">
             <Image
-      src="/logo.jpg"
-      alt="EverNear Logo"
-      width={45}
-      height={45}
-      className="object-contain rounded-full"
-    />
+              src="/logo.jpg"
+              alt="EverNear Logo"
+              width={45}
+              height={45}
+              className="object-contain rounded-full"
+            />
             <span className="text-xl md:text-2xl font-black tracking-wider text-white">
               EVER<span className="text-amber-300">NEAR</span>
             </span>
@@ -87,7 +87,7 @@ export default function Navbar({
         <div className="flex items-center justify-end gap-2">
 
           {!user ? (
-            <>
+            <><Link href="/signin">
               <Button
                 onClick={onLogin}
                 variant="outline"
@@ -96,12 +96,13 @@ export default function Navbar({
               >
                 Sign In
               </Button>
+              </Link>
 
               <Link
                 href="/signUp"
                 className={buttonVariants({
                   size: "sm",
-                 className:"border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-amber-600 text-xs font-bold"
+                  className: "border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-amber-600 text-xs font-bold"
                 })}
               >
                 Sign Up
@@ -154,24 +155,24 @@ export default function Navbar({
 
                 <DropdownMenuSeparator className="bg-slate-700" />
 
-               <DropdownMenuTrigger className="outline-none focus:ring-2 focus:ring-amber-300 rounded-full">
-  <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 bg-emerald-800 flex items-center justify-center text-amber-300 font-bold shadow-lg cursor-pointer hover:scale-105 transition-transform">
-    {user.photoURL ? (
-      <Image
-        src={user.photoURL}
-        alt={user.displayName || "User"}
-        fill
-        className="object-cover"
-      />
-    ) : (
-      <span>
-        {user.displayName
-          ? user.displayName.substring(0, 1).toUpperCase()
-          : "U"}
-      </span>
-    )}
-  </div>
-</DropdownMenuTrigger>
+                <DropdownMenuTrigger className="outline-none focus:ring-2 focus:ring-amber-300 rounded-full">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 bg-emerald-800 flex items-center justify-center text-amber-300 font-bold shadow-lg cursor-pointer hover:scale-105 transition-transform">
+                    {user.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt={user.displayName || "User"}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span>
+                        {user.displayName
+                          ? user.displayName.substring(0, 1).toUpperCase()
+                          : "U"}
+                      </span>
+                    )}
+                  </div>
+                </DropdownMenuTrigger>
 
                 <DropdownMenuItem
                   onClick={onLogout}

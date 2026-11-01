@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -14,10 +15,32 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field"
+import { authClient } from "@/lib/auth-client"
 import { Input } from "@/components/ui/input"
+import {signUp} from "@/lib/auth-client"
 
 export default function SignUpPage(){
-
+  const router = useRouter();
+  const handleEmailSignUp = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const user =Object.fromEntries(formData.entries()) as {name:string, image:string,email:string,password:string};
+   
+    const {data,error} = await authClient.signUp.email({
+      name:user.name,
+      email:user.email,
+      password:user.password,
+      image:user.image,
+        
+    })
+    if(data){
+     router.push('/')
+    }
+    if(error){
+      console.error("Error signing up:", error);
+    }
+console.log(data,error);
+  }
   return (
     <div className=" bg-amber-800 min-h-screen flex flex-col items-center justify-center">
     <div className="flex flex-col gap-6 max-w-md mx-w-8xl mx-auto px-6 py-6 bg-amber-200">
@@ -27,7 +50,7 @@ export default function SignUpPage(){
           
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleEmailSignUp}>
             <FieldGroup>
               <Field>
               
@@ -45,19 +68,32 @@ export default function SignUpPage(){
                 Or continue with
               </FieldSeparator>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">Name</FieldLabel>
                 <Input
-                  id="email"
-                  type="email"
+                  id="name"
+                  type="text"
+                  name="name"
                   placeholder="m@example.com"
                   required
                 />
               </Field>
+              <Field>
+                <FieldLabel htmlFor="email">ImageURL</FieldLabel>
+                <Input
+                  id="image"
+                  type="url"
+                  name="image"
+                  placeholder="Image URL"
+                  required
+                />
+              </Field>
+
                <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="m@example.com"
                   required
                 />
@@ -72,12 +108,12 @@ export default function SignUpPage(){
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" name="password" type="password" required />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">Sign up</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                Already have an account? <a href="/signin">Sign in</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

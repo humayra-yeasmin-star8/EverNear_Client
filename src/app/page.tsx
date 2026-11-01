@@ -1,5 +1,5 @@
 "use client";
-
+import { authClient } from "@/lib/auth-client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
@@ -48,6 +48,7 @@ export default function Home() {
           alt="EverNear Hero Cover"
           fill
           priority
+          sizes="100vw"
           className="object-center object-fill z-0 px-5 py-5"
         />
 
