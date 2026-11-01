@@ -5,6 +5,8 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import HeroEventBar from "@/components/HeroEventBar";
 import Footer from "@/components/Footer";
+import EventCard from "@/components/events/EventCard";
+import { Sparkles, Calendar, Heart} from 'lucide-react'
 
 export default function Home() {
   const [user, setUser] = useState<{
