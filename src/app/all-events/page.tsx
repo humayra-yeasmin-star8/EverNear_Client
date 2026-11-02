@@ -19,15 +19,16 @@ export default function AllEventsPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Fetch all events on load
+  // Fetch all events on load
   const loadEvents = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/events");
+      const res = await fetch(`${API_BASE_URL}/events`); // ⚠️ Removed /api
       const data = await res.json();
-      setEvents(data);
+      setEvents(data.data || []); // ⚠️ Extract the 'data' array from your backend response envelope
     } catch (err) {
       console.error("Failed to fetch events:", err);
     } finally {
-      setLoadingEvents(false);
+      setLoading(false); // Make sure this matches your loading state variable name (loadingEvents)
     }
   };
 
@@ -55,12 +56,13 @@ export default function AllEventsPage() {
       participantCount: 0,
     };
 
-    try {
-      const res = await fetch("http://localhost:8000/api/events", {
+   try {
+      const res = await fetch(`${API_BASE_URL}/events`, { // ⚠️ Removed /api
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
       });
+  
 
       if (res.ok) {
         setSuccessMessage("Event published successfully!");
