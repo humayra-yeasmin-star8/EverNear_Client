@@ -42,11 +42,11 @@ export default function SignUpPage() {
         icon: "error",
         title: "Weak Password",
         text: "Password must be at least 6 characters long and contain at least one uppercase and one lowercase letter.",
-        confirmButtonColor: "#b45309", // matches amber styling
+        confirmButtonColor: "#b45309", 
       });
-      return; // Stop execution if validation fails
+      return; 
     }
-    // ---------------------------------
+  
 
     const { data, error } = await authClient.signUp.email({
       name: user.name,
