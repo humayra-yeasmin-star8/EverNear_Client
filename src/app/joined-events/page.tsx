@@ -23,7 +23,11 @@ export default function JoinedEventsPage() {
   // Fetch joined events
   const fetchJoinedEvents = async (userId: string) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/events/joined/${userId}`);
+      const res = await fetch(`${API_BASE_URL}/events/joined/${userId}`,{
+        headers: {
+          authorization: 'user logged in', // Include the access token if needed
+        }
+      });
 
       if (!res.ok) {
         throw new Error("Failed to fetch joined events");

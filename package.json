@@ -13,6 +13,7 @@
     "@better-auth/mongo-adapter": "^1.7.15",
     "@shadcn/react": "^0.3.1",
     "better-auth": "^1.7.15",
+    "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "cn": "^0.5.1",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

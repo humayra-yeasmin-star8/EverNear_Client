@@ -28,11 +28,11 @@ export default function Navbar() {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50 px-6 md:px-9 py-6 bg-transparent">
-      <div className="max-w-7xl mx-auto grid grid-cols-3 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-3 items-center justify-between justify-center gap-4 md:gap-4">
 
         {/* LEFT: LOGO */}
-        <div className="flex items-center justify-start">
-          <Link href="/" className="flex items-center gap-3 justify-between">
+        <div className="flex items-center justify-center gap-4 md:justify-start justify-between">
+          <Link href="/" className="flex items-center gap-5 justify-between">
             <div className="relative w-10 h-10 overflow-hidden rounded-full border border-amber-400">
               <Image src="/logo.jpg" alt="EverNear Logo" fill className="object-cover" />
             </div>
@@ -50,21 +50,27 @@ export default function Navbar() {
           </Link>
           <Link
             href="/all-events"
-            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors"
+            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors whitespace-nowrap"
           >
             All Events
           </Link>
           <Link
-            href="/schedules"
-            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors"
+            href="/about"
+            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors whitespace-nowrap"
+          >
+            About Us
+          </Link>
+          <Link
+            href="/"
+            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors whitespace-nowrap"
           >
             Schedule
           </Link>
           <Link
-            href="/about"
-            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors"
+            href="/#contact"
+            className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors whitespace-nowrap"
           >
-            About
+            Contact Us
           </Link>
         </nav>
 
@@ -89,7 +95,7 @@ export default function Navbar() {
                     href="/profile"
                     className="flex items-center gap-2 w-full py-1.5 px-2 text-xs font-semibold text-slate-200 hover:bg-slate-800 rounded-md transition"
                   >
-                    Profile Settings
+                    Profile 
                   </Link>
                 </div>
                 <div className="pt-3">

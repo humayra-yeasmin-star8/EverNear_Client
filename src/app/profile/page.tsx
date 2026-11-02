@@ -15,7 +15,9 @@ import {
   Sparkles, 
   Edit3,
   ListPlus,
-  BookmarkCheck
+  BookmarkCheck,
+  Sun,
+  Moon
 } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -26,6 +28,32 @@ export default function ProfileDashboardPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [updating, setUpdating] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  // Load saved theme preference on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
+    const initialTheme = savedTheme || "dark";
+    setTheme(initialTheme);
+    if (initialTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  // Function to toggle between dark and light mode system-wide
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -87,11 +115,9 @@ export default function ProfileDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col justify-between relativ bg-yellow-300">
+    <div className="min-h-screen text-slate-100 flex flex-col justify-between relative bg-yellow-300">
     
       <div className="absolute inset-0 z-0">
-       
-        
         {/* Dark translucent overlay to ensure readability */}
         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]" />
       </div>
@@ -144,6 +170,26 @@ export default function ProfileDashboardPage() {
                 </h1>
                 <p className="text-xs text-white mt-0.5">Manage your account settings and preferences</p>
               </div>
+
+              {/* Theme Toggle Button */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-slate-900/90 hover:bg-slate-800 text-amber-300 text-xs font-bold transition-all shadow-md w-fit"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <>
+                    <Sun className="w-4 h-4 text-amber-400" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-4 h-4 text-amber-300" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Profile Details Card Box */}

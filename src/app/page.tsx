@@ -1,5 +1,5 @@
 "use client";
-
+import confetti from "canvas-confetti";
 import { authClient } from "@/lib/auth-client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -13,6 +13,14 @@ import { fetchEvents } from "@/lib/api";
 import { Sparkles, ShieldAlert } from "lucide-react";
 
 export default function Home() {
+  const handleDonateClick = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }, // Triggers near the middle-lower section
+      colors: ['#f59e0b', '#ec4899', '#8b5cf6', '#3b82f6'], // Matching festive colors
+    });
+  };
   const { data: session } = authClient.useSession();
 
   // Dynamically map session user to navbar format
@@ -65,16 +73,12 @@ export default function Home() {
         <Navbar user={user} />
 
         {/* Hero Content Overlay */}
-        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 text-center pb-24">
-          <div className="bg-slate-950/75 border border-emerald-500/40 p-8 rounded-2xl max-w-xl backdrop-blur-md shadow-2xl">
-            <h1 className="text-4xl font-extrabold text-amber-300 mb-3 tracking-tight drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]">
-              EverNear Community Hub
-            </h1>
-            <p className="text-slate-200 text-sm leading-relaxed drop-shadow">
-              Community-driven local social service events platform in Dhaka. Join us to make a direct impact.
-            </p>
-          </div>
-        </div>
+        <section className="text-center space-y-4 py-8 px-5 md:px-11 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+  <h1 className="text-3xl md:text-5xl font-serif italic font-extrabold bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
+    &ldquo;Bringing hearts closer, one shared moment at a time.&rdquo;
+  </h1>
+</section>
+        
 
         {/* Floating Bottom Event Details Bar */}
         <HeroEventBar
@@ -127,6 +131,33 @@ export default function Home() {
               ))}
             </div>
           )}
+        </section>
+        <section className="max-w-md mx-auto px-15 py-9 rounded-4xl bg-white/80 dark:bg-slate-900/80 border border-amber-400/30 backdrop-blur-md shadow-xl text-center space-y-3 transition-colors duration-300">
+          {/* Animated Emoji Icon */}
+          <div className="w-20 h-14 mx-auto rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-3xl shadow-inner animate-bounce">
+            🤝
+          </div>
+
+          {/* Text Content */}
+          <h3 className="text-xl font-black text-amber-600 dark:text-amber-300 uppercase tracking-wide">
+            Keep Donating 🎁
+          </h3>
+
+          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            Your generosity fuels our community events and brings unforgettable moments closer to everyone.
+          </p>
+
+          {/* Action Button */}
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={handleDonateClick}
+              className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-amber-400 hover:bg-amber-500 text-slate-950 rounded-xl shadow-lg transition-transform active:scale-95 inline-flex items-center gap-2 cursor-pointer"
+            >
+              <span>Donate Now</span>
+              <span>💖</span>
+            </button>
+          </div>
         </section>
 
         {/* SECTION 3: Completed Events */}
@@ -182,12 +213,14 @@ export default function Home() {
               >
                 Cancel
               </button>
+              
             </div>
           </div>
         </div>
       )}
 
-     
+     <Footer />
     </div>
   );
 }
+  
