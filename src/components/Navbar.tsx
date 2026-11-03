@@ -37,6 +37,11 @@ export default function Navbar() {
     { href: "/#contact", label: "Contact Us" },
   ];
 
+  const userInitial =
+    user?.name?.[0]?.toUpperCase() ||
+    user?.email?.[0]?.toUpperCase() ||
+    "U";
+
   return (
     <header className="absolute top-0 left-0 right-0 z-50 px-4 md:px-9 py-4 md:py-6 bg-transparent">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -75,17 +80,28 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center justify-end">
           {user ? (
             <div className="relative group flex items-center">
-              <div className="w-10 h-10 rounded-full bg-[#663744] flex items-center justify-center text-white font-bold text-base shadow border border-[#89515E] cursor-pointer">
-                {user.name?.[0]?.toUpperCase() ||
-                  user.email?.[0]?.toUpperCase() ||
-                  "U"}
+              <div className="relative w-11 h-11 rounded-full overflow-hidden bg-[#663744] border border-[#89515E] flex items-center justify-center text-white font-bold cursor-pointer">
+                {user.image ? (
+                  <Image
+                    src={user.image}
+                    alt={user.name || "User"}
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  userInitial
+                )}
               </div>
 
+              {/* DESKTOP PROFILE DROPDOWN */}
               <div className="absolute right-0 top-full mt-2 w-64 bg-slate-900 border border-[#663744]/60 rounded-xl shadow-2xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-slate-100">
                 <div className="space-y-1 pb-3 border-b border-slate-800">
                   <p className="text-sm font-bold text-[#B78C91] truncate">
                     {user.name || "User"}
                   </p>
+
                   <p className="text-xs text-slate-400 truncate">
                     {user.email}
                   </p>
@@ -162,15 +178,37 @@ export default function Navbar() {
             ))}
           </nav>
 
+          {/* MOBILE AUTHENTICATION */}
           <div className="border-t border-slate-700 mt-5 pt-5">
             {user ? (
               <div>
-                <p className="text-sm font-bold text-[#B78C91]">
-                  {user.name || "User"}
-                </p>
-                <p className="text-xs text-slate-400 mt-1 break-all">
-                  {user.email}
-                </p>
+                {/* MOBILE USER PROFILE */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden bg-[#663744] border border-[#89515E] flex items-center justify-center text-white font-bold shrink-0">
+                    {user.image ? (
+                      <Image
+                        src={user.image}
+                        alt={user.name || "User"}
+                        fill
+                        sizes="44px"
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      userInitial
+                    )}
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-[#B78C91] truncate">
+                      {user.name || "User"}
+                    </p>
+
+                    <p className="text-xs text-slate-400 mt-1 break-all">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
 
                 <Link
                   href="/profile"
@@ -199,10 +237,9 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/signUp"
+                  href="/signup"
                   onClick={() => setMenuOpen(false)}
                   className="flex-1 text-center px-4 py-2.5 text-xs font-bold bg-[#663744] hover:bg-[#89515E] text-white rounded-lg"
-                
                 >
                   Sign Up
                 </Link>
