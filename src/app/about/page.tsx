@@ -1,25 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
+import Navbar from "@/components/Navbar"
+
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 pt-32 pb-20 px-6">
+    <main className="min-h-screen bg-gradient-to-br from-[#FFEBA8] via-[#FDE49A] to-[#F8CE6B] text-slate-100 pt-32 pb-20 px-6">
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Header Section */}
+        <Navbar/>
         <div className="text-center space-y-4">
           <div className="relative w-20 h-20 mx-auto overflow-hidden rounded-full border-2 border-amber-400 shadow-xl">
             <Image src="/logo.jpg" alt="EverNear Logo" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-amber-300 tracking-wider">
+          <h1 className="text-4xl md:text-5xl font-black text-amber-500 tracking-wider">
             WELCOME TO EVERNEAR
           </h1>
-          <p className="text-slate-400 text-sm md:text-base uppercase tracking-widest font-semibold">
+          <p className="text-slate-800 text-sm md:text-base uppercase tracking-widest font-semibold">
             Bringing People & Unforgettable Moments Together
           </p>
         </div>
 
         {/* Warm Letter */}
-        <div className="bg-slate-900/80 border border-amber-500/20 rounded-2xl p-8 md:p-12 shadow-2xl relative backdrop-blur-sm space-y-6 text-slate-300 leading-relaxed text-base md:text-lg">
+        <div className="bg-emerald-950 border border-b-black rounded-2xl p-8 md:p-12 shadow-2xl relative backdrop-blur-sm space-y-6 text-slate-300 leading-relaxed text-base md:text-lg">
           <p className="text-amber-200 font-medium text-xl">Dear Friend,</p>
           
           <p>
@@ -51,7 +54,10 @@ export default function AboutPage() {
             </Link>
           </div>
         </div>
+         
       </div>
+     
     </main>
+    
   );
 }

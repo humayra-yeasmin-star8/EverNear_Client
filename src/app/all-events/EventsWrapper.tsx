@@ -5,34 +5,62 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
 import { EventItem } from "@/types/event";
 import { Sparkles, Calendar, MapPin, PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+type FilterOption = "default" | "mine" | "interested";
 
 export default function EventsWrapper({
   token,
-}:{token: string}) {
+}: {
+  token: string;
+}) {
   const [events, setEvents] = useState<EventItem[]>([]);
+  const [myEventIds, setMyEventIds] = useState<string[]>([]);
+  const [interestedEventIds, setInterestedEventIds] = useState<string[]>([]);
+  const [filterOption, setFilterOption] = useState<FilterOption>("default");
   const [loadingEvents, setLoadingEvents] = useState(true);
 
-  // Inside EventsWrapper (All Events page)
+  
   useEffect(() => {
     let cancelled = false;
 
+    const fetchList = async (path: string) => {
+      const res = await fetch(`${API_BASE_URL}${path}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+
+      const data = await res.json();
+      return (Array.isArray(data) ? data : data.data || []) as EventItem[];
+    };
+
     const loadEvents = async () => {
       try {
-        const res = await fetch("http://localhost:8000/events", { // <--- NO query params here
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const [allEvents, creatorEvents, interestedEvents] = await Promise.all([
+          fetchList("/events"),
+          // Creator endpoint only returns events owned by the current user.
+          fetchList("/events/creator").catch(() => [] as EventItem[]),
+          // "Interested" = joined or reminded. Fall back to joined events if
+          // the backend does not expose /events/interested yet.
+          fetchList("/events/interested").catch(() =>
+            fetchList("/events/joined").catch(() => [] as EventItem[]),
+          ),
+        ]);
 
-        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        if (cancelled) return;
 
-        const data = await res.json();
-        if (!cancelled) setEvents(Array.isArray(data) ? data : data.data || []);
+        setEvents(allEvents);
+        setMyEventIds(creatorEvents.map((event) => event._id));
+        setInterestedEventIds(interestedEvents.map((event) => event._id));
       } catch (err) {
         console.error("Failed to fetch events:", err);
       } finally {
@@ -47,8 +75,21 @@ export default function EventsWrapper({
     };
   }, [token]);
 
+  const visibleEvents = events.filter((event) => {
+    if (filterOption === "mine") return myEventIds.includes(event._id);
+    if (filterOption === "interested") return interestedEventIds.includes(event._id);
+    return true;
+  });
+
+  const emptyMessage =
+    filterOption === "mine"
+      ? "You haven't created any events yet."
+      : filterOption === "interested"
+        ? "You haven't joined or shown interest in any events yet."
+        : "No community initiatives found yet.";
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
+    <div className="min-h-scree bg-gradient-to-br from-[#ecce6b] via-[#FDE49A] to-[#F8CE6B] text-gray-950 flex flex-col justify-between">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 py-28 space-y-12 w-full flex-1">
@@ -60,21 +101,43 @@ export default function EventsWrapper({
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               Community Hub
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-amber-300 tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-amber-800 tracking-tight">
               Explore All Community Initiatives
             </h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-800">
               Browse through all upcoming and past community events hosted across Dhaka.
             </p>
           </div>
 
-          {/* Link to your separate Add Event page */}
-          <Link
-            href="/addEvents"
-            className="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-xl transition shadow-lg text-xs uppercase tracking-wider flex items-center gap-2 shrink-0"
-          >
-            <PlusCircle className="w-4 h-4" /> Create New Event
-          </Link>
+          {/* Filter/sort + link to add event */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="event-filter"
+                className="text-[10px] uppercase tracking-wider font-bold text-slate-800"
+              >
+                Sort By:
+              </label>
+
+              <select
+                id="event-filter"
+                value={filterOption}
+                onChange={(e) => setFilterOption(e.target.value as FilterOption)}
+                className="bg-slate-900 border border-slate-700 text-amber-300 text-xs rounded-lg px-3 py-2 outline-none focus:border-amber-400"
+              >
+                <option value="default">Default</option>
+                <option value="mine">My Events</option>
+                <option value="interested">Events I&apos;m Interested In</option>
+              </select>
+            </div>
+
+            <Link
+              href="/addEvents"
+              className="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-xl transition shadow-lg text-xs uppercase tracking-wider flex items-center gap-2 shrink-0"
+            >
+              <PlusCircle className="w-4 h-4" /> Create New Event
+            </Link>
+          </div>
         </div>
 
         {/* --- EVENTS GRID SECTION --- */}
@@ -82,19 +145,21 @@ export default function EventsWrapper({
           <div className="text-center text-slate-400 py-20 animate-pulse">
             Loading community events...
           </div>
-        ) : events.length === 0 ? (
+        ) : visibleEvents.length === 0 ? (
           <div className="text-center py-20 space-y-3 bg-slate-900/40 border border-slate-800 rounded-2xl">
-            <p className="text-slate-400 text-sm">No community initiatives found yet.</p>
-            <Link
-              href="/addEvents"
-              className="inline-block text-amber-300 hover:underline text-xs font-semibold uppercase tracking-wider"
-            >
-              Be the first to publish one →
-            </Link>
+            <p className="text-slate-400 text-sm">{emptyMessage}</p>
+            {filterOption === "default" && (
+              <Link
+                href="/addEvents"
+                className="inline-block text-amber-300 hover:underline text-xs font-semibold uppercase tracking-wider"
+              >
+                Be the first to publish one →
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((ev) => (
+            {visibleEvents.map((ev) => (
               <div
                 key={ev._id}
                 className="bg-slate-900/80 border border-emerald-500/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between hover:border-amber-300/50 transition-all duration-300 group"
@@ -155,7 +220,7 @@ export default function EventsWrapper({
         )}
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

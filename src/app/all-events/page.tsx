@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import EventsWrapper from "./EventsWrapper";
+import { getTokenSer } from "@/lib/getTokenSer";
 
 export default async function AllEventsPage() {
   const requestHeaders = await headers();
@@ -13,9 +14,7 @@ export default async function AllEventsPage() {
     return <div>Please log in to view events.</div>;
   }
 
-  const token = await auth.api.getToken({
-    headers: requestHeaders,
-  });
+  const token = await getTokenSer();
 
-  return <EventsWrapper token={token?.token || ""} />;
+  return <EventsWrapper token={token || ""} />;
 } 

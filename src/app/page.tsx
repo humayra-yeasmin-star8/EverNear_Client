@@ -5,12 +5,12 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import HeroEventBar from "@/components/HeroEventBar";
-import Footer from "@/components/Footer";
+
 import UpcomingEventCard from "@/components/UpcomingEventCard";
 import PreviousEventCard from "@/components/PreviousEventCard";
 import { EventItem } from "@/types/event";
 import { fetchEvents } from "@/lib/api";
-import { Sparkles, ShieldAlert } from "lucide-react";
+import { Sparkles, ShieldAlert, Search, X } from "lucide-react";
 
 export default function Home() {
   const handleDonateClick = () => {
@@ -36,6 +36,27 @@ export default function Home() {
   const [completedEvents, setCompletedEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const matchesSearch = (event: EventItem) => {
+    if (!normalizedQuery) return true;
+
+    return [
+      event.title,
+      event.description,
+      event.category,
+      event.location,
+      event.date,
+      event.time,
+    ]
+      .filter(Boolean)
+      .some((value) => String(value).toLowerCase().includes(normalizedQuery));
+  };
+
+  const filteredUpcomingEvents = upcomingEvents.filter(matchesSearch);
+  const filteredCompletedEvents = completedEvents.filter(matchesSearch);
 
   useEffect(() => {
     async function loadAllEvents() {
@@ -73,8 +94,8 @@ export default function Home() {
         <Navbar />
 
         {/* Hero Content Overlay */}
-        <section className="text-center space-y-4 py-8 px-5 md:px-11 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-  <h1 className="text-3xl md:text-5xl font-serif italic font-extrabold bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
+        <section className="absolute top-1/2 left-1/2 z-10 w-[90%] sm:w-[85%] md:w-[80%] -translate-x-1/2 -translate-y-1/2 px-2 sm:px-5 md:px-11 py-4 sm:py-6 text-center">
+  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif italic font-extrabold bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent tracking-wide leading-snug sm:leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
     &ldquo;Bringing hearts closer, one shared moment at a time.&rdquo;
   </h1>
 </section>
@@ -93,6 +114,43 @@ export default function Home() {
 
       {/* --- MAIN CONTENT AREA --- */}
       <main className="max-w-7xl mx-auto px-4 py-16 space-y-20 w-full">
+        {/* SECTION: EVENT SEARCH */}
+        <section className="max-w-2xl mx-auto w-full space-y-2">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-700" />
+
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for the events..."
+              aria-label="Search for the events"
+              className="w-full pl-12 pr-12 py-4 rounded-2xl bg-white/90 border border-amber-400/50 text-sm text-slate-900 placeholder-slate-500 shadow-lg outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-400/40 transition"
+            />
+
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-slate-500 hover:text-slate-900 hover:bg-amber-100 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {normalizedQuery && (
+            <p className="text-center text-xs font-semibold text-slate-700">
+              {filteredUpcomingEvents.length + filteredCompletedEvents.length} event
+              {filteredUpcomingEvents.length + filteredCompletedEvents.length === 1
+                ? ""
+                : "s"}{" "}
+              found for &ldquo;{searchQuery}&rdquo;
+            </p>
+          )}
+        </section>
+
         {/* SECTION 2: Upcoming Events */}
         <section id="events-section" className="space-y-8 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -114,16 +172,22 @@ export default function Home() {
                 <div key={i} className="h-96 rounded-2xl bg-amber-300/40 animate-pulse border border-amber-400/30" />
               ))}
             </div>
-          ) : upcomingEvents.length === 0 ? (
+          ) : filteredUpcomingEvents.length === 0 ? (
             <div className="text-center py-12 bg-amber-100/60 rounded-2xl border border-amber-300 p-6">
-              <p className="text-sm font-semibold text-slate-800">No upcoming events found.</p>
+              <p className="text-sm font-semibold text-slate-800">
+                {normalizedQuery
+                  ? "No upcoming events match your search."
+                  : "No upcoming events found."}
+              </p>
               <p className="text-xs text-slate-600 mt-1">
-                Make sure your backend server is running and seed data is populated.
+                {normalizedQuery
+                  ? "Try a different title, location, or category."
+                  : "Make sure your backend server is running and seed data is populated."}
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {upcomingEvents.map((evt) => (
+              {filteredUpcomingEvents.map((evt) => (
                 <UpcomingEventCard
                   key={evt._id}
                   event={evt}
@@ -179,13 +243,17 @@ export default function Home() {
                 <div key={i} className="h-96 rounded-2xl bg-amber-300/40 animate-pulse border border-amber-400/30" />
               ))}
             </div>
-          ) : completedEvents.length === 0 ? (
+          ) : filteredCompletedEvents.length === 0 ? (
             <div className="text-center py-12 bg-amber-100/60 rounded-2xl border border-amber-300 p-6">
-              <p className="text-sm font-semibold text-slate-800">No past memories found.</p>
+              <p className="text-sm font-semibold text-slate-800">
+                {normalizedQuery
+                  ? "No past events match your search."
+                  : "No past memories found."}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {completedEvents.map((evt) => (
+              {filteredCompletedEvents.map((evt) => (
                 <PreviousEventCard key={evt._id} event={evt} />
               ))}
             </div>
@@ -220,8 +288,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
-     <Footer />
     </div>
   );
 }

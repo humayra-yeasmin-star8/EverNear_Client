@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
 import { Sparkles, CheckCircle, AlertCircle } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
@@ -210,7 +210,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

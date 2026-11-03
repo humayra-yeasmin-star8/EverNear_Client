@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { authClient } from "@/lib/auth-client";
 import {
   LayoutDashboard,
@@ -108,11 +107,11 @@ export default function ProfileDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col justify-between relative bg-yellow-300">
+    <div className="min-h-screen text-slate-100 flex flex-col justify-between relative bg-yellow-800">
     
       <div className="absolute inset-0 z-0">
         {/* Dark translucent overlay to ensure readability */}
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-[2px]" />
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen justify-between">
@@ -122,10 +121,10 @@ export default function ProfileDashboardPage() {
         <div className="flex flex-1 pt-20">
           
           {/* --- LEFT HOVER-TO-EXPAND SIDEBAR NAV --- */}
-          <aside className="group w-20 hover:w-64 bg-slate-950 border-r border-slate-800/80 backdrop-blur-md flex flex-col py-8 transition-all duration-300 ease-in-out shrink-0 z-20 overflow-hidden shadow-2xl hidden md:flex">
+          <aside className="group w-20 hover:w-64 bg-gradient-to-br from-[#073911] via-[#03241f] to-[#011810] border-r border-slate-800/80 backdrop-blur-md flex flex-col py-8 transition-all duration-300 ease-in-out shrink-0 z-20 overflow-hidden shadow-2xl hidden md:flex">
             
             <div className="flex items-center gap-4 px-5 mb-8 whitespace-nowrap">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 shadow">
+              <div className="w-10 h-10 rounded-xl bg-emerald-900 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 shadow">
                 <LayoutDashboard className="w-5 h-5" />
               </div>
               <span className="text-sm font-extrabold text-amber-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -134,7 +133,7 @@ export default function ProfileDashboardPage() {
             </div>
 
             <nav className="flex flex-col space-y-2 px-3">
-              <a href="/profile" className="flex items-center gap-4 p-3 bg-amber-500/20 text-amber-300 rounded-xl transition whitespace-nowrap">
+              <a href="/profile" className="flex items-center gap-4 p-3 bg-emerald-800 text-amber-300 rounded-xl transition whitespace-nowrap">
                 <UserIcon className="w-5 h-5 shrink-0" />
                 <span className="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">My Profile</span>
               </a>
@@ -186,7 +185,7 @@ export default function ProfileDashboardPage() {
             </div>
 
             {/* Profile Details Card Box */}
-            <div className="bg-slate-950 border border-amber-500/30 rounded-2xl p-8 backdrop-blur-md shadow-2xl space-y-8">
+            <div className="bg-gradient-to-br from-[#00130b] via-[#012914] to-[#011310] border-amber-500/30 rounded-2xl p-8 backdrop-blur-md shadow-2xl space-y-8">
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
                 <div className="flex items-center gap-4">
@@ -260,7 +259,7 @@ export default function ProfileDashboardPage() {
           </main>
         </div>
 
-        <Footer />
+    
       </div>
     </div>
   );

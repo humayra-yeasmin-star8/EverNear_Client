@@ -35,6 +35,9 @@ export interface EventItem {
   status: "upcoming" | "completed";
   participantCount: number;
   expectedParticipants?: number;
+  // ID of the user who created the event (set by the backend)
+  creatorId?: string;
+  createdAt?: string;
   // Specific fields for completed events / stories:
   aboutText?: string;
   storyText?: string;

@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
 import { authClient } from "@/lib/auth-client";
+import { createEventAction } from "@/lib/actions";
 import Swal from "sweetalert2";
 import { Sparkles } from "lucide-react";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 const initialForm = {
   title: "",
@@ -45,19 +44,10 @@ export default function CreateEventPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/events`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          creatorId: session.user.id,
-          creatorEmail: session.user.email,
-          status: "upcoming",
-          participantCount: 0,
-        }),
-      });
+      // server action: hits POST /events with the token from getTokenSer()
+      const data = await createEventAction(form);
 
-      if (res.ok) {
+      if (data.success) {
         setForm(initialForm);
         Swal.fire({
           icon: "success",
@@ -68,11 +58,10 @@ export default function CreateEventPage() {
         });
         router.push("/manage-events");
       } else {
-        const errData = await res.json();
         Swal.fire({
           icon: "error",
           title: "Submission Failed",
-          text: errData.message || "Failed to create event.",
+          text: data.message || "Failed to create event.",
           confirmButtonColor: "#b45309",
         });
       }
@@ -194,7 +183,7 @@ export default function CreateEventPage() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,10 +13,13 @@ const nextConfig: NextConfig = {
         hostname: "i.pravatar.cc",
       },
       {
-      protocol: "https",
-hostname: "hi.com",
-},
-
+        protocol: "https",
+        hostname: "hi.com",
+      },
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
     ],
   },
 
