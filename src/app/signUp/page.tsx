@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
-import Swal from "sweetalert2"; // 👈 Import SweetAlert2
+import Swal from "sweetalert2"; 
+
 
 export default function SignUpPage() {
   const router = useRouter();

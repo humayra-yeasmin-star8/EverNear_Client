@@ -237,7 +237,7 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  href="/signup"
+                  href="/signUp"
                   onClick={() => setMenuOpen(false)}
                   className="flex-1 text-center px-4 py-2.5 text-xs font-bold bg-[#663744] hover:bg-[#89515E] text-white rounded-lg"
                 >

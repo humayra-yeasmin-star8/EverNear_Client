@@ -119,7 +119,7 @@ catch (error) {
                     {loading ? "Signing in..." : "Sign in"}
                   </Button>
                   <FieldDescription className="text-center mt-2">
-                    Don&apos;t have an account? <a href="/signup" className="underline font-semibold">Sign up</a>
+                    Don&apos;t have an account? <a href="/signUp" className="underline font-semibold">Sign up</a>
                   </FieldDescription>
                 </Field>
               </FieldGroup>
