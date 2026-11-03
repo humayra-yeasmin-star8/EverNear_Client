@@ -122,7 +122,7 @@ export default function Navbar() {
 
               <Link
                 href="/signUp"
-                className="px-4 py-2 text-xs font-bold bg-transparent hover:bg-[#663744]/10 text-[#663744] border border-[#663744]/60 rounded-lg transition shadow"
+                className="px-4 py-2 text-xs font-bold bg-[#f37196] hover:bg-[#663744]/10 text-[#663744] border border-[#663744]/60 rounded-lg transition shadow"
               >
                 Sign Up
               </Link>
@@ -201,7 +201,8 @@ export default function Navbar() {
                 <Link
                   href="/signUp"
                   onClick={() => setMenuOpen(false)}
-                  className="flex-1 text-center px-4 py-2.5 text-xs font-bold bg-transparent hover:bg-[#663744]/10 text-[#B78C91] border border-[#663744]/60 rounded-lg"
+                  className="flex-1 text-center px-4 py-2.5 text-xs font-bold bg-[#663744] hover:bg-[#89515E] text-white rounded-lg"
+                
                 >
                   Sign Up
                 </Link>
