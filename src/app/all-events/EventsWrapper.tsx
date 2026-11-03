@@ -10,40 +10,42 @@ import { EventItem } from "@/types/event";
 import { Sparkles, Calendar, MapPin, PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+
 export default function EventsWrapper({
   token,
 }:{token: string}) {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
-  // Fetch all events on page load
- const loadEvents = async () => {
-    try {
-     const res = await fetch("http://localhost:8000/events", {
-      headers:{
-        Authorization: `Bearer ${token}`,
-      },
-     });
-     
-     if (!res.ok) {
-        throw new Error(`HTTP Error: ${res.status}`);
-      }
-    
-      const data = await res.json();
-      
-      // Handle both direct array or wrapped response { success: true, data: [...] }
-      const eventList = Array.isArray(data) ? data : data.data || [];
-      setEvents(eventList);
-    } catch (err) {
-      console.error("Failed to fetch events:", err);
-    } finally {
-      setLoadingEvents(false);
-    }
-  };
-
+  // Inside EventsWrapper (All Events page)
   useEffect(() => {
+    let cancelled = false;
+
+    const loadEvents = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/events", { // <--- NO query params here
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+
+        const data = await res.json();
+        if (!cancelled) setEvents(Array.isArray(data) ? data : data.data || []);
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+      } finally {
+        if (!cancelled) setLoadingEvents(false);
+      }
+    };
+
     loadEvents();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">

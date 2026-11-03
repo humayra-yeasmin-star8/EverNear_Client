@@ -70,7 +70,7 @@ export default function Home() {
         />
 
         {/* Floating Transparent Navbar */}
-        <Navbar user={user} />
+        <Navbar />
 
         {/* Hero Content Overlay */}
         <section className="text-center space-y-4 py-8 px-5 md:px-11 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
@@ -81,12 +81,14 @@ export default function Home() {
         
 
         {/* Floating Bottom Event Details Bar */}
-        <HeroEventBar
-          date="NOV 15 - 17, 2026"
-          location="Gulshan Community Center, Dhaka"
-          joinedCount={142}
-          category="Winter Cloth Drive"
-        />
+        {upcomingEvents.length > 0 && (
+  <HeroEventBar
+    date={upcomingEvents[0].date || "NOV 18, 2026"}
+    location={upcomingEvents[0].location || "Mirpur 10 Community Center, Dhaka"}
+    joinedCount={upcomingEvents[0].participantCount || 42}
+    category={upcomingEvents[0].category || "Food Distribution"}
+  />
+)}
       </section>
 
       {/* --- MAIN CONTENT AREA --- */}

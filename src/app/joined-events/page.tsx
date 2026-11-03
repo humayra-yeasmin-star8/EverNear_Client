@@ -6,11 +6,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { authClient } from "@/lib/auth-client";
 import { EventItem } from "@/types/event";
+import { fetchJoinedEvents, removeJoinedEvent } from "@/lib/api";
 import { Calendar, Clock, MapPin, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 export default function JoinedEventsPage() {
   const router = useRouter();
@@ -20,41 +18,33 @@ export default function JoinedEventsPage() {
   const [sortOption, setSortOption] = useState<"default" | "date" | "time">("default");
   const [loading, setLoading] = useState(true);
 
-  // Fetch joined events
-  const fetchJoinedEvents = async (userId: string) => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/events/joined/${userId}`,{
-        headers: {
-          authorization: 'user logged in', // Include the access token if needed
-        }
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch joined events");
-      }
-
-      const data = await res.json();
-      setEvents(data.data || []);
-    } catch (err) {
-      console.error("Failed to fetch joined events:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Protect route and fetch events
   useEffect(() => {
     if (isPending) return;
 
     if (!session) {
       router.push("/signin");
-      setLoading(false);
       return;
     }
 
-    if (session.user) {
-      fetchJoinedEvents(session.user.id);
-    }
+    let cancelled = false;
+
+    const loadJoinedEvents = async () => {
+      try {
+        const data = await fetchJoinedEvents();
+        if (!cancelled) setEvents(data);
+      } catch (err) {
+        console.error("Failed to fetch joined events:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    loadJoinedEvents();
+
+    return () => {
+      cancelled = true;
+    };
   }, [session, isPending, router]);
 
   // Handle removing a joined event
@@ -74,16 +64,9 @@ export default function JoinedEventsPage() {
     if (!confirm.isConfirmed) return;
 
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/events/joined/${eventId}/${session.user.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const data = await removeJoinedEvent(eventId);
 
-      const data = await res.json();
-
-      if (res.ok) {
+      if (data.success) {
         // Remove from local state instantly
         setEvents((prev) => prev.filter((ev) => ev._id !== eventId));
         Swal.fire({

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { EventItem, User } from "@/types/event";
+import { EventItem } from "@/types/event";
 import { fetchEventById, joinEvent, saveReminder } from "@/lib/api";
 import {
   Calendar,
@@ -30,6 +30,7 @@ export default function EventDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { data: session } = authClient.useSession();
+  
   const user = session?.user
     ? {
         id: session.user.id,
@@ -41,6 +42,7 @@ export default function EventDetailsPage() {
   const [joined, setJoined] = useState(false);
   const [reminded, setReminded] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
   useEffect(() => {
     async function loadEvent() {
       try {
@@ -110,11 +112,8 @@ export default function EventDetailsPage() {
 
   return (
     <div className="min-h-screen bg-amber-200 text-slate-900 flex flex-col justify-between">
-    <Navbar
-  user={user}
-  onLogin={() => {}}
-  onLogout={() => setUser(null)}
-/>
+      {/* FIXED: Passed user prop cleanly matching Navbar component expectations */}
+      <Navbar />
 
       <main className="max-w-5xl mx-auto w-full px-4 py-8 space-y-10">
         {/* Back button */}

@@ -5,59 +5,84 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Sparkles, CheckCircle, AlertCircle } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function AddEventPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
 
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMessage(null);
-    setErrorMessage(null);
+  // Get form data BEFORE using await
+  const form = e.currentTarget;
+  const formData = new FormData(form);
 
-    const formData = new FormData(e.currentTarget);
-    const eventData = {
-      title: formData.get("title"),
-      category: formData.get("category"),
-      date: formData.get("date"),
-      time: formData.get("time"),
-      location: formData.get("location"),
-      image: formData.get("image"),
-      description: formData.get("description"),
-      status: "upcoming",
-      participantCount: 0,
-    };
-
-    try {
-      const res = await fetch("http://localhost:8000/api/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventData),
-      });
-
-      if (res.ok) {
-        setSuccessMessage("Event published successfully! Redirecting to events...");
-        setTimeout(() => {
-          router.push("/all-events");
-        }, 1500);
-      } else {
-        const errData = await res.json();
-        setErrorMessage(errData.message || "Failed to publish event.");
-      }
-    } catch (err) {
-      console.error("Error creating event:", err);
-      setErrorMessage("Network error. Make sure your backend server is running.");
-    } finally {
-      setLoading(false);
-    }
+  const eventData = {
+    title: String(formData.get("title")),
+    category: String(formData.get("category")),
+    date: String(formData.get("date")),
+    time: String(formData.get("time")),
+    location: String(formData.get("location")),
+    image: String(formData.get("image")),
+    description: String(formData.get("description")),
+    status: "upcoming",
+    participantCount: 0,
   };
+
+  setLoading(true);
+  setSuccessMessage(null);
+  setErrorMessage(null);
+
+  try {
+    // Get authentication token
+    const { data, error } = await authClient.token();
+
+    if (error || !data?.token) {
+      throw new Error("You must be logged in to create an event.");
+    }
+
+    const token = data.token;
+
+    // Send event data to backend
+    const res = await fetch("http://localhost:8000/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(eventData),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok || !result.success) {
+      throw new Error(result.message || "Failed to publish event.");
+    }
+
+    setSuccessMessage("Event published successfully!");
+
+    form.reset();
+
+    setTimeout(() => {
+      router.push("/manage-events");
+    }, 1500);
+
+  } catch (err) {
+    console.error("Error creating event:", err);
+
+    setErrorMessage(
+      err instanceof Error
+        ? err.message
+        : "Something went wrong while creating the event."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
@@ -177,7 +202,7 @@ export default function AddEventPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-lg transition shadow-lg text-sm uppercase tracking-wider disabled:opacity-50"
+              className="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-lg transition shadow-lg text-sm uppercase tracking-wider disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Publishing Event..." : "Publish Event"}
             </button>

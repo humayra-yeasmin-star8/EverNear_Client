@@ -55,7 +55,7 @@ export default function PreviousEventCard({ event }: Props) {
           </div>
           <div className="flex items-center gap-1.5">
             <Users className="w-3.5 h-3.5 text-sky-700" />
-            <span>{event?.participantCount ?? event?.expectedAttendees ?? 0} People Joined</span>
+            <span>{event?.participantCount ?? 0} People Joined</span>
           </div>
         </div>
 

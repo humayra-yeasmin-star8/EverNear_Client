@@ -20,25 +20,15 @@ export default function ManageEventsPage() {
   const [loading, setLoading] = useState(true);
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
 
-  // Fetch user's created events (Fixed route path & data.data extraction)
-  // Fetch user's created events
-  const fetchUserEvents = async (userId: string) => {
-    try {
-      const res = await fetch(
-        `${API_BASE_URL}/events/creator/${userId}`
-      );
+  // Get the JWT from better-auth's /token endpoint (requires the session cookie)
+  const getAuthToken = async () => {
+    const { data, error } = await authClient.$fetch<{ token: string }>("/token");
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch user events");
-      }
-
-      const data = await res.json();
-      setEvents(data.data || []);
-    } catch (err) {
-      console.error("Failed to fetch user events:", err);
-    } finally {
-      setLoading(false);
+    if (error || !data?.token) {
+      throw new Error("Authentication required.");
     }
+
+    return data.token;
   };
 
   // Protect route and fetch events
@@ -47,13 +37,53 @@ export default function ManageEventsPage() {
 
     if (!session) {
       router.push("/signin");
-      setLoading(false);
       return;
     }
 
-    if (session.user) {
-      fetchUserEvents(session.user.id);
-    }
+    let cancelled = false;
+
+    const fetchUserEvents = async () => {
+      try {
+        const { data, error } = await authClient.$fetch<{ token: string }>("/token");
+
+        if (error || !data?.token) {
+          throw new Error("Authentication required.");
+        }
+
+        const res = await fetch(`${API_BASE_URL}/events/creator`, {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+          cache: "no-store",
+        });
+
+        const result = await res.json();
+
+        if (!res.ok || !result.success) {
+          throw new Error(result.message || "Failed to fetch user events");
+        }
+
+        if (!cancelled) setEvents(result.data);
+      } catch (err) {
+        console.error("Failed to fetch user events:", err);
+        if (!cancelled) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Could not load your events. Make sure the backend is running.",
+            confirmButtonColor: "#b45309",
+          });
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchUserEvents();
+
+    return () => {
+      cancelled = true;
+    };
   }, [session, isPending, router]);
 
   // Delete event
@@ -70,8 +100,13 @@ export default function ManageEventsPage() {
 
     if (result.isConfirmed) {
       try {
+        const token = await getAuthToken();
+
         const res = await fetch(`${API_BASE_URL}/events/${eventId}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (!res.ok) {
@@ -99,12 +134,15 @@ export default function ManageEventsPage() {
     if (!editingEvent) return;
 
     try {
+      const token = await getAuthToken();
+
       const res = await fetch(
         `${API_BASE_URL}/events/${editingEvent._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(editingEvent),
         }
@@ -152,7 +190,7 @@ export default function ManageEventsPage() {
 
         {events.length === 0 ? (
           <p className="text-slate-400">
-            You haven't created any events yet.
+            You haven&apos;t created any events yet.
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -6,13 +6,11 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { authClient } from "@/lib/auth-client";
-import { 
-  LayoutDashboard, 
-  User as UserIcon, 
-  Calendar, 
-  Mail, 
-  Plus, 
-  Sparkles, 
+import {
+  LayoutDashboard,
+  User as UserIcon,
+  Mail,
+  Sparkles,
   Edit3,
   ListPlus,
   BookmarkCheck,
@@ -25,21 +23,18 @@ export default function ProfileDashboardPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [updating, setUpdating] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
-  // Load saved theme preference on mount
+  // Load saved theme preference on mount (sync the DOM right away, update state after paint)
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
     const initialTheme = savedTheme || "dark";
-    setTheme(initialTheme);
-    if (initialTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+
+    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+
+    const frame = requestAnimationFrame(() => setTheme(initialTheme));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Function to toggle between dark and light mode system-wide
@@ -58,9 +53,6 @@ export default function ProfileDashboardPage() {
   useEffect(() => {
     if (!isPending && !session) {
       router.push("/signin");
-    } else if (session?.user) {
-      setName(session.user.name || "");
-      setEmail(session.user.email || "");
     }
   }, [session, isPending, router]);
 
@@ -74,14 +66,15 @@ export default function ProfileDashboardPage() {
 
   const currentUser = session.user;
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUpdating(true);
 
     try {
+      const nameValue = String(new FormData(e.currentTarget).get("name") || "");
+
       const { error } = await authClient.updateUser({
-        name: name,
-        email: email,
+        name: nameValue,
       });
 
       if (error) {
@@ -217,8 +210,9 @@ export default function ProfileDashboardPage() {
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Full Name</label>
                     <input
                       type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      name="name"
+                      key={currentUser.name || ""}
+                      defaultValue={currentUser.name || ""}
                       required
                       className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400"
                     />
@@ -228,10 +222,9 @@ export default function ProfileDashboardPage() {
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Address</label>
                     <input
                       type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400"
+                      value={currentUser.email}
+                      readOnly
+                      className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 opacity-70"
                     />
                   </div>
                 </div>
