@@ -20,9 +20,9 @@ export default function Footer() {
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
             
-              <li><Link href="/guidelines" className="hover:text-amber-300 transition-colors">Event Guidelines</Link></li>
-              <li><Link href="/api" className="hover:text-amber-300 transition-colors">Platform API</Link></li>
-              <li><Link href="/organizers" className="hover:text-amber-300 transition-colors">Become an Organizer</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Event Guidelines</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Platform API</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Become an Organizer</Link></li>
 
 
             </ul>
@@ -34,10 +34,10 @@ export default function Footer() {
               HELP
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
-              <li><Link href="/help" className="hover:text-amber-300 transition-colors">Help Center</Link></li>
-              <li><Link href="/contact" className="hover:text-amber-300 transition-colors">Contact Support</Link></li>
-              <li><Link href="/faq" className="hover:text-amber-300 transition-colors">FAQs</Link></li>
-              <li><Link href="/safety" className="hover:text-amber-300 transition-colors">Safety Tips</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Help Center</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Contact Support</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">FAQs</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Safety Tips</Link></li>
             </ul>
           </div>
 
@@ -48,9 +48,9 @@ export default function Footer() {
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
               <li><Link href="/volunteers" className="hover:text-amber-300 transition-colors">Volunteers</Link></li>
-              <li><Link href="/blog" className="hover:text-amber-300 transition-colors">Stories & Blog</Link></li>
-              <li><Link href="/meetups" className="hover:text-amber-300 transition-colors">Local Meetups</Link></li>
-              <li><Link href="/partners" className="hover:text-amber-300 transition-colors">NGO Partners</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Stories & Blog</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Local Meetups</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">NGO Partners</Link></li>
             </ul>
           </div>
 
@@ -61,9 +61,9 @@ export default function Footer() {
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
               <li><Link href="/about" className="hover:text-amber-300 transition-colors">About EverNear</Link></li>
-              <li><Link href="/careers" className="hover:text-amber-300 transition-colors">Careers</Link></li>
-              <li><Link href="/impact" className="hover:text-amber-300 transition-colors">Impact Report</Link></li>
-              <li><Link href="/sitemap" className="hover:text-amber-300 transition-colors">Sitemap</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Careers</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Impact Report</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Sitemap</Link></li>
             </ul>
           </div>
 
@@ -108,11 +108,11 @@ export default function Footer() {
             <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-300">
               <Link href="/events" className="hover:text-amber-300 transition-colors">All Events</Link>
               <span>•</span>
-              <Link href="/locations/dhaka" className="hover:text-amber-300 transition-colors">Dhaka Drives</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">Dhaka Drives</Link>
               <span>•</span>
-              <Link href="/winter-relief" className="hover:text-amber-300 transition-colors">Winter Relief</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">Winter Relief</Link>
               <span>•</span>
-              <Link href="/sitemap" className="hover:text-amber-300 transition-colors">Sitemap</Link>
+              <Link href="/" className="hover:text-amber-300 transition-colors">Sitemap</Link>
             </div>
             
             <p className="text-slate-500">
