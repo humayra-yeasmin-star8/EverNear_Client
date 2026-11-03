@@ -5,7 +5,7 @@ export const authClient = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,
     plugins: [
     jwtClient() 
-  ]
+  ],
 });
 
 // Destructure methods directly from the configured instance:
