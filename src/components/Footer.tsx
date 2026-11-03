@@ -7,7 +7,8 @@ import { Heart } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer id="contact" className="w-full bg-slate-950/90 text-slate-300 border-t border-emerald-500/20 pt-12 pb-8 backdrop-blur-md">
+    <footer 
+     className="w-full bg-slate-950/90 text-slate-300 border-t border-emerald-500/20 pt-12 pb-8 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Top Grid Section */}
