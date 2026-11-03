@@ -11,41 +11,28 @@ interface EventBarProps {
 }
 
 export default function HeroEventBar({
-  location = "Gulshan Community Center, Dhaka",
-  joinedCount = 142,
-  category = "Winter Cloth Drive",
+  date,
+  location = "Mirpur 10 Community Center, Dhaka",
+  joinedCount = 42,
+  category = "Food Distribution",
 }: EventBarProps) {
-  
-  // Helper to dynamically calculate today's date range (e.g., "NOV 03 - 05, 2026")
-  const getDynamicDate = () => {
-    const today = new Date();
-    const endDate = new Date();
-    endDate.setDate(today.getDate() + 2); // 3-day event window
 
-    const options: Intl.DateTimeFormatOptions = { month: "short", day: "2-digit" };
-    const startStr = today.toLocaleDateString("en-US", options).toUpperCase();
-    const endStr = endDate.getDate();
-    const year = today.getFullYear();
-
-    return `${startStr} - ${endStr}, ${year}`;
-  };
-
-  const dynamicDate = getDynamicDate();
+  const displayDate = date || "NOV 18, 2026";
 
   return (
     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl bg-slate-950/85 border border-emerald-500/40 rounded-2xl backdrop-blur-md shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-emerald-500/20 text-white z-20 px-8 py-3">
       
-      {/* 1. DYNAMIC DATE */}
+      {/* 1. EVENT DATE */}
       <div className="flex items-center gap-4 p-5">
         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-amber-300">
           <Calendar className="w-6 h-6" />
         </div>
         <div>
           <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
-            Active Today
+            Next Event Date
           </span>
           <p className="text-sm font-semibold text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
-            {dynamicDate}
+            {displayDate}
           </p>
         </div>
       </div>
