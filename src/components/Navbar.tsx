@@ -61,10 +61,10 @@ export default function Navbar() {
             About Us
           </Link>
           <Link
-            href="/"
+            href="/newsletter"
             className="text-black hover:text-amber-300 text-[10px] md:text-sm font-semibold uppercase tracking-wider transition-colors whitespace-nowrap"
           >
-            Schedule
+            Newsletter
           </Link>
           <Link
             href="/#contact"
