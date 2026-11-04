@@ -6,7 +6,7 @@ import ManageEventsClient from "./ManageEventsClient";
 import { EventItem } from "@/types/event";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  process.env.NEXT_PUBLIC_API_URL ;
 
 export default async function ManageEventsPage() {
   // verify-protected endpoint: get the JWT server-side

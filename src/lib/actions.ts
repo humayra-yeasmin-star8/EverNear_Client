@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getTokenSer } from "./getTokenSer";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  process.env.NEXT_PUBLIC_API_URL ;
 
 // every endpoint below is protected by the backend's `verify` middleware,
 // so each action fetches the JWT server-side instead of on the client
