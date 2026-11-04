@@ -1,37 +1,194 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌿 EverNear – Community Events & Volunteering Platform
 
-## Getting Started
+**EverNear** is a community-driven platform that brings people together through volunteering, social activities, and local events. It helps users discover upcoming events, participate in meaningful activities, and stay connected with their communities.
 
-First, run the development server:
+## ✨ Features
+
+- **User Authentication:** Register and sign in using email/password or Google authentication.
+- **Explore Events:** Browse upcoming and completed community events.
+- **Join Events:** Register for events that interest you.
+- **Event Reminders:** Save reminders for upcoming events.
+- **User Profile:** View your account information and profile picture.
+- **Manage Events:** Manage event information and registrations.
+- **Community Stories:** Explore memories and highlights from previous events.
+- **Responsive Design:** Enjoy the platform on desktop, tablet, and mobile devices.
+
+## 🛠️ Technologies Used
+
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- Lucide React
+- Better Auth
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Better Auth integration
+
+### Authentication & Deployment
+- Google OAuth 2.0
+- Vercel
+
+## 📁 Project Structure
+
+```text
+EverNear/
+│
+├── evernear_client/
+│   ├── public/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── lib/
+│   │   └── types/
+│   ├── .env.local
+│   └── package.json
+│
+└── EverNear_server/
+    ├── index.js
+    ├── .env
+    └── package.json
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js
+- npm
+- MongoDB database
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone YOUR_REPOSITORY_URL
+```
+
+Navigate to the project directory:
+
+```bash
+cd EverNear
+```
+
+### 2. Setup Frontend
+
+Navigate to the frontend folder:
+
+```bash
+cd evernear_client
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env.local` file:
+
+```env
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=your_better_auth_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Frontend will run at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Setup Backend
 
-## Learn More
+Open another terminal and navigate to the backend folder:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cd EverNear_server
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install
+```
 
-## Deploy on Vercel
+Create a `.env` file:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```env
+MONGODB_URI=your_mongodb_connection_string
+PORT=8000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# EverNear_Client
+Start the backend:
+
+```bash
+npm run dev
+```
+
+Backend will run at:
+
+`http://localhost:8000`
+
+## 🔐 Authentication
+
+EverNear uses Better Auth for authentication.
+
+Supported authentication methods:
+
+- Email and password
+- Google OAuth 2.0
+
+Google OAuth requires a configured Google Cloud project with the appropriate OAuth Client ID, Client Secret, and authorized redirect URI.
+
+## 🔗 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/events` | Fetch events |
+| GET | `/events/:id` | Fetch event details |
+| POST | `/events/join` | Register for an event |
+| POST | `/events/remind` | Save an event reminder |
+
+The events endpoint supports filtering:
+
+```text
+/events?status=upcoming
+/events?status=completed
+```
+
+## 🌐 Deployment
+
+The application can be deployed using Vercel.
+
+- **Frontend:** Deploy the Next.js application.
+- **Backend:** Deploy the Express.js API.
+- **Database:** Use MongoDB Atlas or another accessible MongoDB deployment.
+
+Remember to configure the required environment variables in your deployment settings.
+
+## 🎯 Links
+GITHUB Client side :https://github.com/humayra-yeasmin-star8/EverNear_Client
+GITHUB Server side:https://github.com/humayra-yeasmin-star8/EverNear_Server
+LIVE LINK:https://ever-near-client.vercel.app
+
+
+
+**Small actions can create meaningful changes. Let's make a difference together! 🌱**
+
+---
+
+**Developed with ❤️ for building stronger communities.**
