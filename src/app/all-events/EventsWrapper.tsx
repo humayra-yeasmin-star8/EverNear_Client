@@ -11,14 +11,14 @@ import { Sparkles, Calendar, MapPin, PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ;
+  process.env.NEXT_PUBLIC_API_URL;
 
 type FilterOption = "default" | "mine" | "interested";
 
 export default function EventsWrapper({
   token,
 }: {
-  token: string;
+  token?: string | null;
 }) {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [myEventIds, setMyEventIds] = useState<string[]>([]);
@@ -26,15 +26,19 @@ export default function EventsWrapper({
   const [filterOption, setFilterOption] = useState<FilterOption>("default");
   const [loadingEvents, setLoadingEvents] = useState(true);
 
-  
+
   useEffect(() => {
     let cancelled = false;
 
-    const fetchList = async (path: string) => {
+    const fetchList = async (path: string, requiresAuth = false) => {
+      const headers: HeadersInit = {};
+
+      if (requiresAuth && token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const res = await fetch(`${API_BASE_URL}${path}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
       });
 
       if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
@@ -45,16 +49,19 @@ export default function EventsWrapper({
 
     const loadEvents = async () => {
       try {
-        const [allEvents, creatorEvents, interestedEvents] = await Promise.all([
-          fetchList("/events"),
-          // Creator endpoint only returns events owned by the current user.
-          fetchList("/events/creator").catch(() => [] as EventItem[]),
-          // "Interested" = joined or reminded. Fall back to joined events if
-          // the backend does not expose /events/interested yet.
-          fetchList("/events/interested").catch(() =>
-            fetchList("/events/joined").catch(() => [] as EventItem[]),
-          ),
-        ]);
+        const allEvents = await fetchList("/events");
+
+        let creatorEvents: EventItem[] = [];
+        let interestedEvents: EventItem[] = [];
+
+        if (token) {
+          [creatorEvents, interestedEvents] = await Promise.all([
+            fetchList("/events/creator", true).catch(() => [] as EventItem[]),
+            fetchList("/events/interested", true).catch(() =>
+              fetchList("/events/joined", true).catch(() => [] as EventItem[])
+            ),
+          ]);
+        }
 
         if (cancelled) return;
 
@@ -93,7 +100,7 @@ export default function EventsWrapper({
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 py-28 space-y-12 w-full flex-1">
-        
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-800 pb-6">
           <div className="space-y-2 text-center md:text-left">
@@ -173,7 +180,7 @@ export default function EventsWrapper({
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-                  
+
                   {ev.category && (
                     <Badge className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-amber-300 border border-amber-500/30 text-[10px] uppercase font-bold px-2.5 py-1">
                       {ev.category}
@@ -220,7 +227,7 @@ export default function EventsWrapper({
         )}
       </main>
 
-      
+
     </div>
   );
 }

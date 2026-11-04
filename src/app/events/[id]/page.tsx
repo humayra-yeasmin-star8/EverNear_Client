@@ -1,12 +1,10 @@
-import { redirect } from "next/navigation";
+
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { getTokenSer } from "@/lib/getTokenSer";
 import { EventItem } from "@/types/event";
 import EventDetailsClient from "./EventDetailsClient";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function EventDetailsPage({
   params,
@@ -15,23 +13,22 @@ export default async function EventDetailsPage({
 }) {
   const { id } = await params;
 
-  const token = await getTokenSer();
+  let currentUserId: string | null = null;
 
-  if (!token) {
-    redirect("/signin");
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    currentUserId = session?.user?.id ?? null;
+  } catch {
+    currentUserId = null;
   }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const currentUserId = session?.user?.id ?? null;
 
   let event: EventItem | null = null;
   let error: string | null = null;
 
   try {
-    // GET /events/:id is public on the backend (no verify middleware)
     const res = await fetch(`${API_BASE_URL}/events/${id}`, {
       cache: "no-store",
     });
