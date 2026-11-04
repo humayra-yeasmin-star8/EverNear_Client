@@ -48,7 +48,7 @@ export default function Footer() {
               OUR COMMUNITY
             </h3>
             <ul className="flex flex-col gap-2 text-sm font-medium">
-              <li><Link href="/volunteers" className="hover:text-amber-300 transition-colors">Volunteers</Link></li>
+              <li><Link href="/" className="hover:text-amber-300 transition-colors">Volunteers</Link></li>
               <li><Link href="/" className="hover:text-amber-300 transition-colors">Stories & Blog</Link></li>
               <li><Link href="/" className="hover:text-amber-300 transition-colors">Local Meetups</Link></li>
               <li><Link href="/" className="hover:text-amber-300 transition-colors">NGO Partners</Link></li>
@@ -107,7 +107,7 @@ export default function Footer() {
           
           <div className="flex flex-col gap-2 text-center md:text-left">
             <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-300">
-              <Link href="/events" className="hover:text-amber-300 transition-colors">All Events</Link>
+              <Link href="/all-events" className="hover:text-amber-300 transition-colors">All Events</Link>
               <span>•</span>
               <Link href="/" className="hover:text-amber-300 transition-colors">Dhaka Drives</Link>
               <span>•</span>

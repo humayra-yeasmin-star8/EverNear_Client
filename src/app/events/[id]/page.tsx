@@ -15,17 +15,17 @@ export default async function EventDetailsPage({
 }) {
   const { id } = await params;
 
-  
   const token = await getTokenSer();
-  // if (!token) {
-  //   redirect("/signin");
-  // }
+
+  if (!token) {
+    redirect("/signin");
+  }
 
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const currentUserId = "6aea1023e12702a044201947";
+  const currentUserId = session?.user?.id ?? null;
 
   let event: EventItem | null = null;
   let error: string | null = null;

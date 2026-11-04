@@ -25,7 +25,9 @@ export const auth = betterAuth({
         enabled:true,
         strategy:'jwt',
         maxAge:4 * 24 *60 *60,
-
+        // version bump forces any stale cached session cookie to be re-read
+        // from the DB, so new user fields (e.g. the Google photo) show up.
+        version: "2",
       }
     },
 

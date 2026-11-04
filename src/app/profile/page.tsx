@@ -24,8 +24,9 @@ export default function ProfileDashboardPage() {
 
   const [updating, setUpdating] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [imgError, setImgError] = useState(false);
 
-  // Load saved theme preference on mount (sync the DOM right away, update state after paint)
+  // Load saved theme preference on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
     const initialTheme = savedTheme || "dark";
@@ -64,6 +65,7 @@ export default function ProfileDashboardPage() {
   }
 
   const currentUser = session.user;
+  const hasValidImage = currentUser.image && currentUser.image.trim() !== "" && !imgError;
 
   const handleSaveProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,9 +110,7 @@ export default function ProfileDashboardPage() {
 
   return (
     <div className="min-h-screen text-slate-100 flex flex-col justify-between relative bg-yellow-800">
-    
       <div className="absolute inset-0 z-0">
-        {/* Dark translucent overlay to ensure readability */}
         <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-[2px]" />
       </div>
 
@@ -122,7 +122,6 @@ export default function ProfileDashboardPage() {
           
           {/* --- LEFT HOVER-TO-EXPAND SIDEBAR NAV --- */}
           <aside className="group w-20 hover:w-64 bg-gradient-to-br from-[#073911] via-[#03241f] to-[#011810] border-r border-slate-800/80 backdrop-blur-md flex flex-col py-8 transition-all duration-300 ease-in-out shrink-0 z-20 overflow-hidden shadow-2xl hidden md:flex">
-            
             <div className="flex items-center gap-4 px-5 mb-8 whitespace-nowrap">
               <div className="w-10 h-10 rounded-xl bg-emerald-900 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 shadow">
                 <LayoutDashboard className="w-5 h-5" />
@@ -154,7 +153,6 @@ export default function ProfileDashboardPage() {
 
           {/* --- MAIN CONTENT AREA --- */}
           <main className="flex-1 max-w-6xl mx-auto px-6 py-10 space-y-10 w-full z-10">
-            
             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800/80 pb-6 gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-extrabold text-amber-300">
@@ -186,12 +184,18 @@ export default function ProfileDashboardPage() {
 
             {/* Profile Details Card Box */}
             <div className="bg-gradient-to-br from-[#00130b] via-[#012914] to-[#011310] border-amber-500/30 rounded-2xl p-8 backdrop-blur-md shadow-2xl space-y-8">
-              
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
                 <div className="flex items-center gap-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-amber-400 bg-emerald-800 flex items-center justify-center text-white text-xl font-bold shadow-lg shrink-0">
-                    {currentUser.image ? (
-                      <Image src={currentUser.image} alt={currentUser.name || "User"} fill className="object-cover" />
+                    {hasValidImage ? (
+                      <Image 
+                        src={currentUser.image!} 
+                        alt={currentUser.name || "User"} 
+                        fill 
+                        sizes="64px" 
+                        className="object-cover" 
+                        onError={() => setImgError(true)}
+                      />
                     ) : (
                       <span>{currentUser.name?.[0]?.toUpperCase() || "U"}</span>
                     )}
@@ -253,13 +257,9 @@ export default function ProfileDashboardPage() {
                   </button>
                 </div>
               </form>
-
             </div>
-
           </main>
         </div>
-
-    
       </div>
     </div>
   );

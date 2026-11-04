@@ -1,10 +1,13 @@
 import { headers } from "next/headers"
 import { auth } from "./auth"
 
-export const getTokenSer= async ()=>{
-    const jwtToken= await auth.api.getToken({
-        headers:await headers()
-    })
-    const token =jwtToken?.token
-    return token;
-}
+export const getTokenSer = async () => {
+  try {
+    const jwtToken = await auth.api.getToken({
+      headers: await headers(),
+    });
+    return jwtToken?.token ?? null;
+  } catch {
+    return null;
+  }
+};
